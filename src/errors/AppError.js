@@ -31,10 +31,17 @@ class OrderAlreadyCancelledError extends AppError {
   }
 }
 
+class OrderNotModifiableError extends AppError {
+  constructor(orderId) {
+    super('ORDER_NOT_MODIFIABLE', `Order ${orderId} cannot be modified because it is not in NEW status`, 409);
+  }
+}
+
 module.exports = {
   AppError,
   ValidationError,
   OrderNotFoundError,
   ForbiddenError,
   OrderAlreadyCancelledError,
+  OrderNotModifiableError,
 };
