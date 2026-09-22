@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 780" role="img" aria-label="Diagram: a browser sends an HTTP request through the Express app to the router, which calls the service layer, which calls the Order domain model, which calls the in-memory repository. The router, service, and domain layers can each throw a typed AppError; every throw is funneled into one centralized error handler, which returns a consistent JSON error back through Express to the browser.">
+  <defs>
+    <marker id="arrow-accent" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8" />
+    </marker>
+    <marker id="arrow-danger" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b3261e" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="780" fill="#ffffff" />
+
+  <!-- lane backgrounds -->
+  <rect x="10" y="8" width="490" height="756" rx="18" fill="#e8edfc" opacity="0.55" />
+  <rect x="536" y="228" width="414" height="392" rx="18" fill="#fbeae9" opacity="0.6" />
+
+  <text x="32" y="34" font-family="monospace" font-size="11" letter-spacing="0.08em" fill="#1e3a8a" font-weight="600">REQUEST PIPELINE</text>
+  <text x="558" y="252" font-family="monospace" font-size="11" letter-spacing="0.08em" fill="#7f1d1a" font-weight="600">CENTRALIZED ERROR HANDLING</text>
+
+  <!-- Box 1: Browser -->
+  <rect x="30" y="46" width="440" height="70" rx="10" fill="#ffffff" stroke="#d9dee5" />
+  <text x="50" y="72" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">Browser — public/</text>
+  <text x="50" y="93" font-family="sans-serif" font-size="12" fill="#5c6675">index.html + app.js — fetch() calls, renders JSON results</text>
+
+  <!-- Browser <-> Express bidirectional -->
+  <line x1="250" y1="116" x2="250" y2="166" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrow-accent)" marker-start="url(#arrow-accent)" />
+  <text x="266" y="145" font-family="monospace" font-size="11" fill="#5c6675">HTTP JSON — request / response</text>
+
+  <!-- Box 2: Express app -->
+  <rect x="30" y="166" width="440" height="58" rx="10" fill="#ffffff" stroke="#d9dee5" />
+  <text x="50" y="190" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">Express app — server.js</text>
+  <text x="50" y="209" font-family="sans-serif" font-size="12" fill="#5c6675">express.json() · serves public/ · mounts router at /api/v1</text>
+
+  <line x1="250" y1="224" x2="250" y2="256" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrow-accent)" />
+
+  <!-- Box 3: Router -->
+  <rect x="30" y="256" width="440" height="150" rx="10" fill="#ffffff" stroke="#d9dee5" />
+  <text x="50" y="280" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">Router (controller) — orderRoutes.js</text>
+  <text x="50" y="299" font-family="sans-serif" font-size="12" fill="#5c6675">parses the request, shapes the response — never mutates order state</text>
+  <text x="50" y="325" font-family="monospace" font-size="12" fill="#1a2130">POST /api/v1/orders</text>
+  <text x="50" y="347" font-family="monospace" font-size="12" fill="#1a2130">GET /api/v1/orders/:orderId</text>
+  <text x="50" y="369" font-family="monospace" font-size="12" fill="#1a2130">POST /api/v1/orders/:orderId/cancel</text>
+  <text x="50" y="393" font-family="sans-serif" font-size="11.5" fill="#5c6675">↳ calls orderService.createOrder / getOrder / cancelOrder</text>
+
+  <line x1="250" y1="406" x2="250" y2="444" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrow-accent)" />
+
+  <!-- Box 4: Service -->
+  <rect x="30" y="444" width="440" height="74" rx="10" fill="#ffffff" stroke="#d9dee5" />
+  <text x="50" y="468" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">OrderService — services/OrderService.js</text>
+  <text x="50" y="487" font-family="sans-serif" font-size="12" fill="#5c6675">generates order IDs · enforces client ownership (Rule 6)</text>
+  <text x="50" y="505" font-family="sans-serif" font-size="11.5" fill="#5c6675">↳ new Order(...) / order.cancel()</text>
+
+  <line x1="250" y1="518" x2="250" y2="558" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrow-accent)" />
+
+  <!-- Box 5: Domain (highlighted) -->
+  <rect x="30" y="558" width="440" height="86" rx="10" fill="#eef2ff" stroke="#1d4ed8" stroke-width="1.4" />
+  <text x="50" y="583" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">Order (domain) — domain/Order.js</text>
+  <text x="50" y="602" font-family="sans-serif" font-size="12" fill="#5c6675">validates Rules 1–2 on construction · owns cancel() lifecycle (Rule 4)</text>
+  <text x="50" y="620" font-family="sans-serif" font-size="11.5" fill="#5c6675">↳ orderRepository.save(order)</text>
+  <text x="50" y="636" font-family="sans-serif" font-size="11" fill="#1e3a8a" font-weight="600">the only place order state legally changes</text>
+
+  <line x1="250" y1="644" x2="250" y2="682" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrow-accent)" />
+
+  <!-- Box 6: Repository -->
+  <rect x="30" y="682" width="440" height="66" rx="10" fill="#ffffff" stroke="#d9dee5" />
+  <text x="50" y="707" font-family="sans-serif" font-size="14" font-weight="700" fill="#1a2130">OrderRepository — repository/OrderRepository.js</text>
+  <text x="50" y="726" font-family="monospace" font-size="12" fill="#5c6675">Map&lt;orderId, Order&gt; — no locking needed, resets on restart</text>
+
+  <!-- Error lane box -->
+  <rect x="556" y="270" width="374" height="330" rx="10" fill="#ffffff" stroke="#b3261e" stroke-width="1.2" />
+  <text x="576" y="298" font-family="sans-serif" font-size="13.5" font-weight="700" fill="#1a2130">AppError subclasses</text>
+  <text x="576" y="317" font-family="sans-serif" font-size="11.5" fill="#5c6675">errors/AppError.js</text>
+  <text x="576" y="340" font-family="monospace" font-size="11" fill="#1a2130">ValidationError · OrderNotFoundError</text>
+  <text x="576" y="357" font-family="monospace" font-size="11" fill="#1a2130">ForbiddenError · OrderAlreadyCancelledError</text>
+
+  <line x1="576" y1="386" x2="900" y2="386" stroke="#d9dee5" stroke-width="1" />
+
+  <line x1="740" y1="392" x2="740" y2="430" stroke="#b3261e" stroke-width="2" marker-end="url(#arrow-danger)" />
+  <text x="754" y="415" font-family="monospace" font-size="10.5" fill="#5c6675">next(err)</text>
+
+  <text x="576" y="452" font-family="sans-serif" font-size="13.5" font-weight="700" fill="#1a2130">errorHandler middleware</text>
+  <text x="576" y="471" font-family="sans-serif" font-size="11.5" fill="#5c6675">errors/errorHandler.js</text>
+  <text x="576" y="494" font-family="sans-serif" font-size="11.5" fill="#5c6675">maps every AppError to one shape:</text>
+  <text x="576" y="514" font-family="monospace" font-size="11" fill="#1a2130">{ code, message } + status (400/403/404/409)</text>
+  <text x="576" y="533" font-family="sans-serif" font-size="11.5" fill="#5c6675">unrecognized errors → 500, no stack trace leaked</text>
+
+  <!-- dashed throw lines from left boxes into error box -->
+  <path d="M470 320 L556 300" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrow-danger)" fill="none" />
+  <text x="474" y="313" font-family="monospace" font-size="10" fill="#7f1d1a">throw ValidationError (missing clientId)</text>
+
+  <path d="M470 481 L556 355" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrow-danger)" fill="none" />
+  <text x="474" y="474" font-family="monospace" font-size="10" fill="#7f1d1a">throw NotFound / Forbidden (Rule 6)</text>
+
+  <path d="M470 601 L556 460" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrow-danger)" fill="none" />
+  <text x="474" y="612" font-family="monospace" font-size="10" fill="#7f1d1a">throw Validation (Rules 1–2) / AlreadyCancelled (Rule 4)</text>
+
+  <!-- return path back to Express -->
+  <path d="M672 600 C 610 660, 430 240, 470 197" stroke="#b3261e" stroke-width="2" fill="none" marker-end="url(#arrow-danger)" />
+  <text x="486" y="250" font-family="monospace" font-size="10.5" fill="#7f1d1a">error response → Express → browser</text>
+
+  <!-- legend -->
+  <g font-family="monospace" font-size="11" fill="#5c6675">
+    <line x1="30" y1="762" x2="52" y2="762" stroke="#1d4ed8" stroke-width="2" />
+    <text x="58" y="766">synchronous call, happy path</text>
+    <line x1="270" y1="762" x2="292" y2="762" stroke="#b3261e" stroke-width="1.6" stroke-dasharray="5 4" />
+    <text x="298" y="766">thrown AppError</text>
+    <line x1="430" y1="762" x2="452" y2="762" stroke="#b3261e" stroke-width="2" />
+    <text x="458" y="766">error response returned to client</text>
+  </g>
+</svg>

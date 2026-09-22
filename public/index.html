@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equity Order Management</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Equity Order Management Service</h1>
+    <p class="subtitle">In-memory demo &mdash; no exchange connectivity or persistence</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Create Order</h2>
+      <form id="create-form">
+        <label>Client ID
+          <input type="text" id="create-clientId" value="CLIENT001" required />
+        </label>
+        <label>Symbol
+          <input type="text" id="create-symbol" value="AAPL" required />
+        </label>
+        <label>Side
+          <select id="create-side">
+            <option value="BUY">BUY</option>
+            <option value="SELL">SELL</option>
+          </select>
+        </label>
+        <label>Order Type
+          <select id="create-orderType">
+            <option value="LIMIT">LIMIT</option>
+            <option value="MARKET">MARKET</option>
+          </select>
+        </label>
+        <label>Quantity
+          <input type="number" id="create-quantity" value="100" min="1" step="1" required />
+        </label>
+        <label>Price
+          <input type="number" id="create-price" value="225.50" min="0" step="0.01" />
+        </label>
+        <button type="submit">Create Order</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>View / Cancel Order</h2>
+      <form id="view-form">
+        <label>Order ID
+          <input type="text" id="order-orderId" placeholder="ORD-10001" required />
+        </label>
+        <label>Client ID
+          <input type="text" id="order-clientId" value="CLIENT001" required />
+        </label>
+        <div class="button-row">
+          <button type="submit">Get Order</button>
+          <button type="button" id="cancel-btn">Cancel Order</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Result</h2>
+      <pre id="result">No order loaded yet.</pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

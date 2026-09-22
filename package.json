@@ -1,0 +1,14 @@
+{
+  "name": "capital-markets-oms",
+  "version": "1.0.0",
+  "description": "Small REST-based Equity Order Management Service (development codebase only)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
