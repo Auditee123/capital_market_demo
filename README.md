@@ -71,7 +71,7 @@ npm install
 npm start
 ```
 
-The server listens on `http://localhost:3000` (override with `PORT`). Open
+The server listens on `http://localhost:4000` (override with `PORT`). Open
 that URL in a browser to use the frontend, or call the API directly.
 
 ## How to run tests
@@ -91,7 +91,7 @@ developer-level tests for this codebase, not a QA automation framework.
 Create an order:
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/orders \
+curl -X POST http://localhost:4000/api/v1/orders \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": "CLIENT001",
@@ -106,13 +106,13 @@ curl -X POST http://localhost:3000/api/v1/orders \
 Retrieve an order (client must own it):
 
 ```bash
-curl "http://localhost:3000/api/v1/orders/ORD-10001?clientId=CLIENT001"
+curl "http://localhost:4000/api/v1/orders/ORD-10001?clientId=CLIENT001"
 ```
 
 Cancel an order:
 
 ```bash
-curl -X POST "http://localhost:3000/api/v1/orders/ORD-10001/cancel?clientId=CLIENT001"
+curl -X POST "http://localhost:4000/api/v1/orders/ORD-10001/cancel?clientId=CLIENT001"
 ```
 
 Errors follow one shape, e.g. cancelling an already-cancelled order (409):
