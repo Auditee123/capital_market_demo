@@ -32,6 +32,12 @@ class OrderService {
     return this.orderRepository.save(order);
   }
 
+  modifyOrderQuantity(orderId, clientId, quantity) {
+    const order = this.findOwnedOrder(orderId, clientId);
+    order.updateQuantity(quantity);
+    return this.orderRepository.save(order);
+  }
+
   // Rule 6: A client can retrieve or cancel only its own orders.
   findOwnedOrder(orderId, clientId) {
     const order = this.orderRepository.findById(orderId);

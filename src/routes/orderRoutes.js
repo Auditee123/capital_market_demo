@@ -42,6 +42,17 @@ function createOrderRouter(orderService) {
     }
   });
 
+  router.post('/orders/:orderId/modify', (req, res, next) => {
+    try {
+      const clientId = requireClientId(req.query.clientId || (req.body && req.body.clientId));
+      const { quantity } = req.body || {};
+      const order = orderService.modifyOrderQuantity(req.params.orderId, clientId, quantity);
+      res.status(200).json(order.toJSON());
+    } catch (err) {
+      next(err);
+    }
+  });
+
   return router;
 }
 

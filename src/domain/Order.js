@@ -1,5 +1,5 @@
 const { Side, OrderType, OrderStatus } = require('./constants');
-const { ValidationError, OrderAlreadyCancelledError } = require('../errors/AppError');
+const { ValidationError, OrderAlreadyCancelledError, OrderNotModifiableError } = require('../errors/AppError');
 
 // Rounds to 2 decimal places to keep money values consistent instead of
 // relying on raw floating-point arithmetic.
@@ -56,6 +56,19 @@ class Order {
       throw new OrderAlreadyCancelledError(this.orderId);
     }
     this.status = OrderStatus.CANCELLED;
+    this.updatedAt = new Date().toISOString();
+  }
+
+  // Rule 7: Only an order with status NEW can have its quantity modified.
+  updateQuantity(quantity) {
+    if (this.status !== OrderStatus.NEW) {
+      throw new OrderNotModifiableError(this.orderId);
+    }
+    // Same quantity validation rule as order creation.
+    if (typeof quantity !== 'number' || Number.isNaN(quantity) || quantity <= 0) {
+      throw new ValidationError('quantity must be greater than zero');
+    }
+    this.quantity = quantity;
     this.updatedAt = new Date().toISOString();
   }
 
